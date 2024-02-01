@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "type": "module",
   "types": "./dist/index.d.ts",
-  "private": false,
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "author": "Pablo Berganza",
   "license": "MIT",
