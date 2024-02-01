@@ -1,4 +1,4 @@
-import { LitElement, html, css, PropertyValues } from "lit";
+import { LitElement, html, css, PropertyValues, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { when } from "lit/directives/when.js";
 import type { Post } from "./types";
@@ -17,6 +17,7 @@ export class FediComments extends LitElement {
     :host {
       --background-color: #fff;
       --color: #000;
+      --border-color: #eee;
       display: block;
       background: var(--background-color);
       color: var(--color);
@@ -28,6 +29,7 @@ export class FediComments extends LitElement {
       :host {
         --background-color: #282c37;
         --color: #f9f9f9;
+        --border-color: #555;
       }
     }
 
@@ -42,6 +44,10 @@ export class FediComments extends LitElement {
       list-style: none;
     }
 
+    .reply {
+      margin-left: 24px;
+    }
+
     #spinner-item {
       display: flex;
       justify-content: center;
@@ -49,13 +55,7 @@ export class FediComments extends LitElement {
     }
 
     li:not(:last-child) {
-      border-bottom: 1px solid #eee;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      li:not(:last-child) {
-        border-bottom: 1px solid #555;
-      }
+      border-bottom: 1px solid var(--border-color);
     }
   `;
 
@@ -84,19 +84,42 @@ export class FediComments extends LitElement {
   }
 
   render() {
+    const comments = this.comments.filter(
+      (c) => c.in_reply_to_id === this.postId,
+    );
+    const replies = this.comments.filter(
+      (c) => c.in_reply_to_id !== this.postId,
+    );
     return html`<ul>
       ${when(
         this.comments.length,
         () =>
-          this.comments.map(
-            (comment) =>
-              html`<li>
+          comments
+            .filter((c) => c.in_reply_to_id === this.postId)
+            .map((comment) => {
+              return html`<li>
                 <fedi-post
                   instance=${this.instance}
                   .post=${comment}
                 ></fedi-post>
-              </li>`,
-          ),
+                ${when(
+                  comment.replies_count,
+                  () =>
+                    html`<ul class="reply">
+                      ${replies
+                        .filter((c) => c.in_reply_to_id === comment.id)
+                        .map((c) => {
+                          return html`<li>
+                            <fedi-post
+                              instance=${this.instance}
+                              .post=${c}
+                            ></fedi-post>
+                          </li>`;
+                        })}
+                    </ul>`,
+                )}
+              </li>`;
+            }),
         () => html`<li id="spinner-item"><fedi-spinner></fedi-spinner></li>`,
       )}
     </ul>`;

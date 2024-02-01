@@ -26,4 +26,5 @@ export type Post = {
   content: string;
   emojis: Emoji[];
   account: Account;
+  in_reply_to_id?: string;
 };
