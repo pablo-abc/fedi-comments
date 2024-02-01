@@ -8,6 +8,11 @@
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
+  "author": "Pablo Berganza",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "@github/relative-time-element": "^4.3.1",
     "@open-wc/scoped-elements": "^3.0.5",
