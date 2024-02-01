@@ -10,6 +10,7 @@
   },
   "author": "Pablo Berganza",
   "license": "MIT",
+  "repository": "github:pablo-abc/fedi-comments",
   "files": [
     "dist"
   ],
