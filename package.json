@@ -1,6 +1,6 @@
 {
   "name": "@pberganza/fedi-comments",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -19,11 +19,9 @@
   ],
   "dependencies": {
     "@github/relative-time-element": "^4.3.1",
-    "@open-wc/scoped-elements": "^3.0.5",
     "lit": "^3.1.0"
   },
   "devDependencies": {
-    "@webcomponents/scoped-custom-element-registry": "^0.0.9",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
     "vite-plugin-dts": "^3.7.2"

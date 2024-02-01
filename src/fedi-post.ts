@@ -1,17 +1,12 @@
-import { ScopedElementsMixin } from "@open-wc/scoped-elements/lit-element.js";
 import { LitElement, html, css } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import type { Post } from "./types";
 
-import { RelativeTimeElement } from "@github/relative-time-element/relative-time";
+import "@github/relative-time-element";
 
 @customElement("fedi-post")
-export class FediPost extends ScopedElementsMixin(LitElement) {
-  static scopedElements = {
-    "relative-time": RelativeTimeElement,
-  };
-
+export class FediPost extends LitElement {
   static styles = css`
     :host {
       display: block;

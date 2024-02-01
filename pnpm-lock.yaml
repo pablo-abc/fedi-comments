@@ -8,17 +8,11 @@ dependencies:
   '@github/relative-time-element':
     specifier: ^4.3.1
     version: 4.3.1
-  '@open-wc/scoped-elements':
-    specifier: ^3.0.5
-    version: 3.0.5
   lit:
     specifier: ^3.1.0
     version: 3.1.1
 
 devDependencies:
-  '@webcomponents/scoped-custom-element-registry':
-    specifier: ^0.0.9
-    version: 0.0.9
   typescript:
     specifier: ^5.2.2
     version: 5.3.3
@@ -322,17 +316,6 @@ packages:
     resolution: {integrity: sha512-9b8mPpKrfeGRuhFH5iO1iwCLeIIsV6+H1sRfxbkoGXIyQE2BTsPd9zqSqQJ+pv5sJ/hT5M1zvOFL02MnEezFug==}
     dev: true
 
-  /@open-wc/dedupe-mixin@1.4.0:
-    resolution: {integrity: sha512-Sj7gKl1TLcDbF7B6KUhtvr+1UCxdhMbNY5KxdU5IfMFWqL8oy1ZeAcCANjoB1TL0AJTcPmcCFsCbHf8X2jGDUA==}
-    dev: false
-
-  /@open-wc/scoped-elements@3.0.5:
-    resolution: {integrity: sha512-q4U+hFTQQRyorJILOpmBm6PY2hgjCnQe214nXJNjbJMQ9EvT55oyZ7C8BY5aFYJkytUyBoawlMpZt4F2xjdzHw==}
-    dependencies:
-      '@open-wc/dedupe-mixin': 1.4.0
-      lit: 3.1.1
-    dev: false
-
   /@rollup/pluginutils@5.1.0:
     resolution: {integrity: sha512-XTIWOPPcpvyKI6L1NHo0lFlCyznUEyPmPY1mc3KpPVDYulHSTvyeLNVW00QTLIAFNhR3kYnJTQHeGqU4M3n09g==}
     engines: {node: '>=14.0.0'}
@@ -554,10 +537,6 @@ packages:
 
   /@vue/shared@3.4.15:
     resolution: {integrity: sha512-KzfPTxVaWfB+eGcGdbSf4CWdaXcGDqckoeXUh7SB3fZdEtzPCK2Vq9B/lRRL3yutax/LWITz+SwvgyOxz5V75g==}
-    dev: true
-
-  /@webcomponents/scoped-custom-element-registry@0.0.9:
-    resolution: {integrity: sha512-4RVHwN9oIp23mhrxeDbP9/0wvdcrB0d/MFMqIStShIgfzsqXZXf1OdU5kvqjgdMYavQ5Zm8C6BuBcAjzNwAetQ==}
     dev: true
 
   /ajv@6.12.6:
