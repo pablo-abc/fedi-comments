@@ -10,7 +10,10 @@ export default defineConfig({
     rollupOptions: {
       external: [
         "lit",
-        "@github/relative-time-element",
+        "lit/directives/unsafe-html.js",
+        "lit/directives/when.js",
+        "lit/decorators.js",
+        "@github/relative-time-element/relative-time",
         "@open-wc/scoped-elements/lit-element.js",
       ],
     },
