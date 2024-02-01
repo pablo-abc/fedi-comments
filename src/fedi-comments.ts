@@ -1,4 +1,4 @@
-import { LitElement, html, css, PropertyValues, nothing } from "lit";
+import { LitElement, html, css, PropertyValues } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { when } from "lit/directives/when.js";
 import type { Post } from "./types";
