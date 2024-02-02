@@ -1,5 +1,5 @@
 import { LitElement, html, css, PropertyValues } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { when } from "lit/directives/when.js";
 import type { Post } from "./types";
 
@@ -17,6 +17,7 @@ export class FediComments extends LitElement {
     :host {
       --background-color: #fff;
       --color: #000;
+      --link-color: #5e64f8;
       --border-color: #eee;
       display: block;
       background: var(--background-color);
@@ -29,6 +30,7 @@ export class FediComments extends LitElement {
       :host {
         --background-color: #282c37;
         --color: #f9f9f9;
+        --link-color: #8c8dff;
         --border-color: #555;
       }
     }
@@ -44,6 +46,11 @@ export class FediComments extends LitElement {
       list-style: none;
     }
 
+    a,
+    a:visited {
+      color: var(--link-color);
+    }
+
     .reply {
       margin-left: 24px;
     }
@@ -57,6 +64,10 @@ export class FediComments extends LitElement {
     li:not(:last-child) {
       border-bottom: 1px solid var(--border-color);
     }
+
+    #instructions {
+      padding: 16px;
+    }
   `;
 
   @property({ type: String })
@@ -65,8 +76,11 @@ export class FediComments extends LitElement {
   @property({ type: String })
   instance!: string;
 
-  @property({ type: Array })
+  @state()
   comments: Post[] = [];
+
+  @state()
+  post: Post | null = null;
 
   async fetchComments() {
     if (!this.postId || !this.instance) return;
@@ -77,9 +91,19 @@ export class FediComments extends LitElement {
     this.comments = data.descendants;
   }
 
+  async fetchPost() {
+    if (!this.postId || !this.instance) return;
+    const response = await fetch(
+      `https://${this.instance}/api/v1/statuses/${this.postId}`,
+    );
+    const data: Post = await response.json();
+    this.post = data;
+  }
+
   override updated(changedProperties: PropertyValues<this>) {
     if (changedProperties.has("postId") || changedProperties.has("instance")) {
       this.fetchComments();
+      this.fetchPost();
     }
   }
 
@@ -90,38 +114,54 @@ export class FediComments extends LitElement {
     const replies = this.comments.filter(
       (c) => c.in_reply_to_id !== this.postId,
     );
-    return html`<ul>
-      ${when(
-        this.comments.length,
-        () =>
-          comments
-            .filter((c) => c.in_reply_to_id === this.postId)
-            .map((comment) => {
-              return html`<li>
-                <fedi-post
-                  instance=${this.instance}
-                  .post=${comment}
-                ></fedi-post>
-                ${when(
-                  comment.replies_count,
-                  () =>
-                    html`<ul class="reply">
-                      ${replies
-                        .filter((c) => c.in_reply_to_id === comment.id)
-                        .map((c) => {
-                          return html`<li>
-                            <fedi-post
-                              instance=${this.instance}
-                              .post=${c}
-                            ></fedi-post>
-                          </li>`;
-                        })}
-                    </ul>`,
-                )}
-              </li>`;
-            }),
-        () => html`<li id="spinner-item"><fedi-spinner></fedi-spinner></li>`,
-      )}
-    </ul>`;
+    return html`
+      <div>
+        <div id="instructions">
+          <slot name="instructions">
+            You can add your comment by replying with your Fediverse account to
+            this post:
+          </slot>
+          <a href=${this.post?.url}>
+            <slot name="view-post-text">View post</slot>
+          </a>
+        </div>
+        <ul>
+          ${when(
+            this.comments.length,
+            () =>
+              comments
+                .filter((c) => c.in_reply_to_id === this.postId)
+                .map((comment) => {
+                  return html`<li>
+                    <fedi-post instance=${this.instance} .post=${comment}>
+                      <span slot="view-on-text">
+                        <slot name="view-on-text">View on</slot>
+                      </span>
+                    </fedi-post>
+                    ${when(
+                      comment.replies_count,
+                      () =>
+                        html`<ul class="reply">
+                          ${replies
+                            .filter((c) => c.in_reply_to_id === comment.id)
+                            .map((c) => {
+                              return html`<li>
+                                <fedi-post instance=${this.instance} .post=${c}>
+                                  <span slot="view-on-text">
+                                    <slot name="view-on-text">View on</slot>
+                                  </span>
+                                </fedi-post>
+                              </li>`;
+                            })}
+                        </ul>`,
+                    )}
+                  </li>`;
+                }),
+            () =>
+              html`<li id="spinner-item"><fedi-spinner></fedi-spinner></li>`,
+          )}
+        </ul>
+      </div>
+    `;
   }
 }

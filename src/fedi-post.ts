@@ -55,14 +55,7 @@ export class FediPost extends LitElement {
 
     a,
     a:visited {
-      color: #5e64f8;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      a,
-      a:visited {
-        color: #8c8dff;
-      }
+      color: var(--link-color);
     }
 
     #content p {
@@ -133,7 +126,7 @@ export class FediPost extends LitElement {
             rel="nofollow noreferrer noopener"
             href=${this.post.url}
           >
-            View on
+            <slot name="view-on-text"></slot>
             <em>${acct.split("@")[1]}</em>
           </a>
         </footer>
