@@ -68,6 +68,11 @@ export class FediComments extends LitElement {
     #instructions {
       padding: 16px;
     }
+
+    #link-spinner {
+      --spinner-size: 1em;
+      display: inline-block;
+    }
   `;
 
   @property({ type: String })
@@ -82,6 +87,9 @@ export class FediComments extends LitElement {
   @state()
   post: Post | null = null;
 
+  @state()
+  loading = true;
+
   async fetchComments() {
     if (!this.postId || !this.instance) return;
     const response = await fetch(
@@ -89,6 +97,7 @@ export class FediComments extends LitElement {
     );
     const data: PostContext = await response.json();
     this.comments = data.descendants;
+    this.loading = false;
   }
 
   async fetchPost() {
@@ -121,13 +130,19 @@ export class FediComments extends LitElement {
             You can add your comment by replying with your Fediverse account to
             this post:
           </slot>
-          <a href=${this.post?.url}>
-            <slot name="view-post-text">View post</slot>
-          </a>
+          ${when(
+            this.post,
+            (post) => html`
+              <a href=${post.url}>
+                <slot name="view-post-text">View post</slot>
+              </a>
+            `,
+            () => html`<fedi-spinner id="link-spinner"></fedi-spinner>`,
+          )}
         </div>
         <ul>
           ${when(
-            this.comments.length,
+            !this.loading,
             () =>
               comments
                 .filter((c) => c.in_reply_to_id === this.postId)
